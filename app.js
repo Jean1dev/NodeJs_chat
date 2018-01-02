@@ -2,6 +2,14 @@
 var app = require('./config/config');
 
 /* parametrizar a porta */
-app.listen(80, function(){
-	console.log("on");
+var server = app.listen(80, function(){
+	console.log("onlineee");
+});
+
+var io = require('socket.io').listen(server);
+
+/*criar a conexao com websockt */
+io.on('connection', function(socket){
+	socket.on('disconnect', function(){
+	});
 });
