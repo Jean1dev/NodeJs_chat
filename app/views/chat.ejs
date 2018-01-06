@@ -89,42 +89,49 @@
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 			<div class="container">
 				<div class="panel-body campo-mensagem">
-						<div class="col-md-12">
-							<div class="input-group">
-								<input type="text" class="form-control" placeholder="Mensagem" id="mensagem">							
-								<input type="hidden" value="<%=dadosForm.apelido%>" id="apelido" />
-								<input type="hidden" value="<%=dadosForm.apelido%>" value="0" id="apelido_atualizado" />
-								<span class="input-group-btn">
-									<button class="btn btn-default" type="button" id="enviar">></button>
-								</span>
-							</div>
+				
+					<div class="col-md-12">
+						<div class="input-group">
+							<input type="text" class="form-control" placeholder="Mensagem" id="mensagem">
+							<input type="hidden" value="<%=dadosForm.apelido%>" id="apelido" >
+							<input type="hidden" value="0" id="apelido_atualizado_nos_clientes" >
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="button" id="enviar_mensagem">></button>
+							</span>
 						</div>
+					</div>
 				</div>
 			</div>
 		</nav>		
 		
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-		<script src="socket.io/socket.io.js"></script>
+
+		<script src="/socket.io/socket.io.js"></script>
 		<script>
 			var socket = io('http://localhost');
 
-			$('#enviar').click(function(){
-				socket.emit('msgParaServer', 
-					{apelido: $('#apelido').val(),
-					 mensagem: $('#mensagem').val(),
-					 apelido_atualizado : $('#apelido_atualizado').val()});
+			$('#enviar_mensagem').click( function(){
 
-				$('#mensagem').val('');
-				$('#apelido_atualizado').val(1);
+				socket.emit(
+					'msgParaServidor',
+					{ 
+						apelido: $('#apelido').val(), 
+						mensagem: $('#mensagem').val(),
+						apelido_atualizado_nos_clientes : $('#apelido_atualizado_nos_clientes').val()
+					}
+				);	
+
+				$('#mensagem').val("");
+				$('#apelido_atualizado_nos_clientes').val(1);
 			});
+			
 
 			socket.on('msgParaCliente', function(data){
-				console.log($('#apelido').val());
 				var html = '';
 
 				html += '<div class="dialogo">';
-				html += '<h4>' + data.apelido +'</h4>';
-				html += '<p>' + data.mensagem + '</p>';
+					html += '<h4>' + data.apelido + '</h4>';
+					html += '<p>' + data.mensagem + '</p>';
 				html += '</div>';
 
 				$('#dialogos').append(html);
@@ -132,12 +139,13 @@
 				window.scrollTo(0, document.body.scrollHeight);
 			});
 
-			socket.on('ParticipantesParaCliente', function(data){
+
+			socket.on('participantesParaCliente', function(data){
 				var html = '';
 
 				html += '<span class="participante">';
-				html += '<img src="images/ico_usuario.png">'
-				html += data.apelido;
+					html += '<img src="images/ico_usuario.png">';
+					html += data.apelido;
 				html += '</span>';
 
 				$('#pessoas').append(html);
