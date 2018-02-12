@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="panel-body">
-                            <form accept-charset="UTF-8" role="form" class="form-signin" action="/chat" method="POST">
+                            <form accept-charset="UTF-8" role="form" class="form-signin" action="/chat" method="post">
                                 <fieldset>
                                     <label class="panel-login">
                                         <div class="login_result"></div>
@@ -36,17 +36,18 @@
                             </form>
                         </div>
                     </div>
+
                     <div>
-                        <% if(validacao.length > 0){ %>
+                        <% if(validacao.length > 0) {%>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="alert alert-danger">
                                         <strong>Atenção!</strong>
                                         <ul>
-                                            <% for(var i = 0; i < validacao.length; i++){ %>
-                                                <li><%= validacao[i].msg %></li>
+                                            <% for(var i = 0; i < validacao.length; i++) { %>
+                                                <li><%=validacao[i].msg%></li>
                                             <% } %>
-                                        </ul>
+                                        </ul>   
                                     </div>
                                 </div>
                             </div>

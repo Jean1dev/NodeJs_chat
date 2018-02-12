@@ -1,30 +1,48 @@
-/* importar config servidor*/
-var app = require('./config/config');
+/* importar as configurações do servidor */
+var app = require('./config/server');
 
-/* parametrizar a porta */
+/* parametrizar a porta de escuta */
 var server = app.listen(80, function(){
-	console.log("sss");
-});
+	console.log('Servidor online');
+})
 
 var io = require('socket.io').listen(server);
+
 app.set('io', io);
 
-/*criar a conexao com websockt */
+/* criar a conexão por websocket */
 io.on('connection', function(socket){
+	console.log('Usuário conectou');
+
 	socket.on('disconnect', function(){
+		console.log('Usuário desconectou');
 	});
 
-	socket.on('msgParaServer', function(data){
-		socket.emit('msgParaCliente', {apelido: data.apelido, mensagem: data.mensagem});
-		
-		socket.broadcast.emit('msgParaCliente', {apelido: data.apelido, mensagem: data.mensagem});
+	socket.on('msgParaServidor', function(data){
 
-		if(parseInt(data.apelido_atualizado) == 0){
-			socket.emit('ParticipantesParaCliente', {apelido: data.apelido});
-		
-			socket.broadcast.emit('ParticipantesParaCliente', {apelido: data.apelido});		
+		/* dialogo */
+		socket.emit(
+			'msgParaCliente', 
+			{apelido: data.apelido, mensagem: data.mensagem}
+		);
+
+		socket.broadcast.emit(
+			'msgParaCliente', 
+			{apelido: data.apelido, mensagem: data.mensagem}
+		);
+
+		/* participantes */
+		if(parseInt(data.apelido_atualizado_nos_clientes) == 0){
+			socket.emit(
+				'participantesParaCliente', 
+				{apelido: data.apelido}
+			);
+
+			socket.broadcast.emit(
+				'participantesParaCliente', 
+				{apelido: data.apelido}
+			);
 		}
 	});
-});
 
-//teste
+});
