@@ -1,5 +1,5 @@
 /* importar as configurações do servidor */
-var app = require('./config/server');
+var app = require('./config/config');
 
 /* parametrizar a porta de escuta */
 var server = app.listen(80, function(){
