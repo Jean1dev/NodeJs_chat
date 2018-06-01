@@ -1,9 +1,16 @@
+
+var url = require('url');
 /* importar as configurações do servidor */
 var app = require('./config/config');
 
 /* parametrizar a porta de escuta */
-var server = app.listen(80, function(){
-	console.log('Servidor online');
+var server = app.listen(8080, function(){
+/*	console.log('__filename: ', __filename);
+	console.log('__dirname: ', __dirname);
+	console.log('process.argv: ', process.argv);
+	console.log('process.env: ', process.env);
+	console.log('Servidor online');*/
+	console.log(this.window)
 })
 
 var io = require('socket.io').listen(server);
